@@ -48,11 +48,7 @@
 #include <mt-plat/battery_common.h>
 #include <mt-plat/battery_meter_hal.h>
 #include <mach/mt_battery_meter.h>
-#ifdef MTK_MULTI_BAT_PROFILE_SUPPORT
-#include <mach/mt_battery_meter_table_multi_profile.h>
-#else
 #include <mach/mt_battery_meter_table.h>
-#endif
 #include <mach/mt_pmic.h>
 
 
@@ -244,6 +240,15 @@ signed int gFG_max_temperature = -20;
 signed int gFG_min_temperature = 100;
 
 #endif				/* battery info */
+
+signed int g_Q_MAX_POS_50[] = {2140, 2155, 2083};//2-2112
+signed int g_Q_MAX_POS_25[] = {2157, 2138, 1991};//2-2096
+signed int g_Q_MAX_POS_0[] = {2040, 2086, 2110};
+signed int g_Q_MAX_NEG_10[] = {2020, 2131, 2005};
+signed int g_Q_MAX_POS_50_H_CURRENT[] = {2125, 2120, 2071};//2-2078
+signed int g_Q_MAX_POS_25_H_CURRENT[] = {2133, 2121, 1952};//2-2079
+signed int g_Q_MAX_POS_0_H_CURRENT[] = {1480, 1976, 1774};
+signed int g_Q_MAX_NEG_10_H_CURRENT[] = {618, 1274, 1000};//3-673
 
 /*extern char *saved_command_line;*/
 /* Temperature window size */
@@ -1166,51 +1171,45 @@ int fgauge_get_saddles_r_table(void)
 
 BATTERY_PROFILE_STRUCT_P fgauge_get_profile(unsigned int temperature)
 {
-	switch (temperature) {
-	case batt_meter_cust_data.temperature_t0:
-		return &battery_profile_t0[g_fg_battery_id][0];
-		/*break;*/
-	case batt_meter_cust_data.temperature_t1:
-		return &battery_profile_t1[g_fg_battery_id][0];
-		/*break;*/
-	case batt_meter_cust_data.temperature_t2:
-		return &battery_profile_t2[g_fg_battery_id][0];
-		/*break;*/
-	case batt_meter_cust_data.temperature_t3:
-		return &battery_profile_t3[g_fg_battery_id][0];
-		/*break;*/
-	case batt_meter_cust_data.temperature_t:
+if (temperature == batt_meter_cust_data.temperature_t0)
+		return &battery_profile_t0[g_fg_battery_id];
+		
+	if (temperature == batt_meter_cust_data.temperature_t1)
+		return &battery_profile_t1[g_fg_battery_id];
+		
+	if (temperature == batt_meter_cust_data.temperature_t2)
+		return &battery_profile_t2[g_fg_battery_id];
+		
+	if (temperature == batt_meter_cust_data.temperature_t3)
+		return &battery_profile_t3[g_fg_battery_id];
+		
+	if (temperature == batt_meter_cust_data.temperature_t)
 		return &battery_profile_temperature[0];
-		/*break;*/
-	default:
+		
+	else
 		return NULL;
-		/*break;*/
-	}
+	
 }
 
 R_PROFILE_STRUCT_P fgauge_get_profile_r_table(unsigned int temperature)
 {
-	switch (temperature) {
-	case batt_meter_cust_data.temperature_t0:
-		return &r_profile_t0[g_fg_battery_id][0];
-		/*break;*/
-	case batt_meter_cust_data.temperature_t1:
-		return &r_profile_t1[g_fg_battery_id][0];
-		/*break;*/
-	case batt_meter_cust_data.temperature_t2:
-		return &r_profile_t2[g_fg_battery_id][0];
-		/*break;*/
-	case batt_meter_cust_data.temperature_t3:
-		return &r_profile_t3[g_fg_battery_id][0];
-		/*break;*/
-	case batt_meter_cust_data.temperature_t:
+if (temperature == batt_meter_cust_data.temperature_t0)
+		return &r_profile_t0[g_fg_battery_id];
+		
+	if (temperature == batt_meter_cust_data.temperature_t1)
+		return &r_profile_t1[g_fg_battery_id];
+		
+	if (temperature == batt_meter_cust_data.temperature_t2)
+		return &r_profile_t2[g_fg_battery_id];
+		
+	if (temperature == batt_meter_cust_data.temperature_t3)
+		return &r_profile_t3[g_fg_battery_id];
+		
+	if (temperature == batt_meter_cust_data.temperature_t)
 		return &r_profile_temperature[0];
-		/*break;*/
-	default:
+	else
 		return NULL;
-		/*break;*/
 	}
-}
 #else
 int fgauge_get_saddles(void)
 {
@@ -2171,8 +2170,8 @@ void oam_run(void)
 	struct timespec now_time;
 	signed int delta_time = 0;
 
-	/* now_time = rtc_read_hw_time(); */
-	getrawmonotonic(&now_time);
+	/*get_monotonic_boottime(&now_time);*/	/*This api includes suspend_time*/
+	getrawmonotonic(&now_time);		/*This api does NOT include suspend_time*/
 
 	/* delta_time = now_time - last_oam_run_time; */
 	delta_time = now_time.tv_sec - last_oam_run_time.tv_sec;

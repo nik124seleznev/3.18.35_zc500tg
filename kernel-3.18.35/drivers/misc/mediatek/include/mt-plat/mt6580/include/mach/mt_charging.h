@@ -1,18 +1,11 @@
-/*
- * Copyright (C) 2015 MediaTek Inc.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2 as
- * published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- */
-
 #ifndef _CUST_BAT_H_
 #define _CUST_BAT_H_
+
+#define MTK_MULTI_BAT_PROFILE_SUPPORT
+#define BATTERY_TEMP_CHARGING_CURRENT
+/* High battery support */
+
+#define HIGH_BATTERY_VOLTAGE_SUPPORT
 
 /* stop charging while in talking mode */
 #define STOP_CHARGING_IN_TAKLING
@@ -21,11 +14,26 @@
 
 /* Battery Temperature Protection */
 #define MTK_TEMPERATURE_RECHARGE_SUPPORT
+/* modify by gyg 2015.3.9 for temp_protect*/
+#ifdef BATTERY_TEMP_CHARGING_CURRENT
+#define MAX_CHARGE_TEMPERATURE  55
+#define MAX_CHARGE_TEMPERATURE_MINUS_X_DEGREE	52
+#define MIN_CHARGE_TEMPERATURE  0
+#define MIN_CHARGE_TEMPERATURE_PLUS_X_DEGREE	3
+#define ERR_CHARGE_TEMPERATURE  0xFF
+
+#define CHARGE_TMEPERATURE_48          48
+#define CHARGE_TMEPERATURE_10          10
+#define CHARGE_TMEPERATURE_15          15     //gyg BATTERY_TEMP_CHARGING_CURRENT
+#define CHARGE_TMEPERATURE_45          45
+#else
 #define MAX_CHARGE_TEMPERATURE  50
 #define MAX_CHARGE_TEMPERATURE_MINUS_X_DEGREE	47
 #define MIN_CHARGE_TEMPERATURE  0
 #define MIN_CHARGE_TEMPERATURE_PLUS_X_DEGREE	6
 #define ERR_CHARGE_TEMPERATURE  0xFF
+
+#endif
 
 /* Linear Charging Threshold */
 #define V_PRE2CC_THRES	3400	/*mV*/
@@ -41,7 +49,8 @@
 
 #define USB_CHARGER_CURRENT	CHARGE_CURRENT_500_00_MA	/*500mA*/
 /*#define AC_CHARGER_CURRENT					CHARGE_CURRENT_650_00_MA*/
-#define AC_CHARGER_CURRENT	CHARGE_CURRENT_1000_00_MA
+#define AC_CHARGER_CURRENT		CHARGE_CURRENT_850_00_MA
+#define AC_CHARGER_CURRENT_00C		CHARGE_CURRENT_0_00_MA
 #define NON_STD_AC_CHARGER_CURRENT	CHARGE_CURRENT_500_00_MA
 #define CHARGING_HOST_CHARGER_CURRENT	CHARGE_CURRENT_650_00_MA
 #define APPLE_0_5A_CHARGER_CURRENT	CHARGE_CURRENT_500_00_MA
@@ -105,6 +114,17 @@
 
 #ifdef CONFIG_MTK_FAN5405_SUPPORT
 #define FAN5405_BUSNUM 1
+
+#endif
+
+#ifdef BATTERY_TEMP_CHARGING_CURRENT
+typedef enum {     
+       E_BAT_T_L_0 = 0,        // (..., -5)
+       E_BAT_T_B_0_10,         //(-5, 15]
+       E_BAT_T_B_10_48,        //(15, 48]
+       E_BAT_T_B_48_55,        //(48, 55]
+       E_BAT_T_U_55            //(55, ...)
+} E_BAT_TEMP;
 #endif
 
 #endif
