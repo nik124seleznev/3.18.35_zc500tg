@@ -1,9 +1,7 @@
 make[1]: вход в каталог «/home/nik-kst/Android/3.18.35/kernel-3.18.35/out»
-  GEN     ./Makefile
-scripts/kconfig/conf --silentoldconfig Kconfig
   CHK     include/config/kernel.release
-  GEN     ./Makefile
   CHK     include/generated/uapi/linux/version.h
+  GEN     ./Makefile
   CHK     include/generated/utsrelease.h
   Using .. as source for kernel
 make[2]: «include/generated/mach-types.h» не требует обновления.
@@ -14,106 +12,16 @@ make[2]: «include/generated/mach-types.h» не требует обновлен
   LD      arch/arm/crypto/aes-arm-bs.o
   LD      arch/arm/crypto/built-in.o
 rm arch/arm/crypto/aesbs-core.S
-  LD      sound/soc/codecs/built-in.o
-  CC      sound/soc/mediatek/mt_soc_audio_6580/AudDrv_Gpio.o
-  DTC     arch/arm/boot/dts/vz6580_we_i_n.dtb
 cameraisp drv by platform 
-  CC      sound/soc/mediatek/mt_soc_audio_6580/mt_soc_codec_63xx.o
+  DTC     arch/arm/boot/dts/vz6580_we_i_n.dtb
 *MTK_GPU_VERSION 1 = mali
 *MTK_PLATFORM: mt6580
 $CONFIG_MTK_GPU_COMMON_DVFS_SUPPORT is []
 *MTK_PLATFORM: mt6580
-*MTK_GPU_VERSION 2 = utgard
 -= project path  ../drivers/misc/mediatek/imgsensor/src/mt6580/camera_project/vz6580_we_i_n/ =-
 imgsensor drv by platform gc0310_yuv imx179_mipi_raw ov5670_mipi_raw
 imgsensor drv by project 
-  LD      sound/soc/mediatek/mt_soc_audio_6580/built-in.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_atomics.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_irq.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_wq.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_locks.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_wait_queue.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_low_level_mem.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_math.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_memory.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_misc.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_mali.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_notification.o
-  LD      sound/soc/mediatek/built-in.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_time.o
-  LD      sound/soc/built-in.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_timers.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_bitmap.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_os_alloc.o
-  LD      sound/built-in.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_external.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_block_alloc.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_swap_alloc.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_manager.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_virtual.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_util.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_cow.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_defer_bind.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_ukk_mem.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_ukk_gp.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_ukk_pp.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_ukk_core.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_ukk_soft_job.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_ukk_timeline.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_kernel_core.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_kernel_linux.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_session.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_device_pause_resume.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_kernel_vsync.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_ukk_vsync.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_kernel_sysfs.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_mmu.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_mmu_page_directory.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_mem_validation.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_hw_core.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_gp.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_pp.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_pp_job.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_gp_job.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_soft_job.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_scheduler.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_executor.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_group.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_dlbu.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_broadcast.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_pm.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_pmu.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_user_settings_db.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_kernel_utilization.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_control_timer.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_l2_cache.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_timeline.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_timeline_fence_wait.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_timeline_sync_fence.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_spinlock_reentrant.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/common/mali_pm_domain.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_osk_pm.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_pmu_power_up_down.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/__malidrv_build_info.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/platform/mt6580/platform.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/platform/mt6580/platform_pmm.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_dma_buf.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_memory_secure.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/linux/mali_sync.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/../../mediatek/mtk_mali_kernel.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/platform/mt6580/arm_core_scaling.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/mtk_common/mtk_gpu_meminfo.o
-  CC      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/mtk_common/mtk_mem_record.o
-  LD      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/mali.o
-  LD      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/mali/built-in.o
-  LD      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/mali/built-in.o
-  LD      drivers/misc/mediatek/gpu/gpu_mali/mali_utgard/built-in.o
-  LD      drivers/misc/mediatek/gpu/gpu_mali/built-in.o
-  LD      drivers/misc/mediatek/gpu/built-in.o
-  LD      drivers/misc/mediatek/built-in.o
-  LD      drivers/misc/built-in.o
-  LD      drivers/built-in.o
+*MTK_GPU_VERSION 2 = utgard
   LINK    vmlinux
   LD      vmlinux.o
   MODPOST vmlinux.o
