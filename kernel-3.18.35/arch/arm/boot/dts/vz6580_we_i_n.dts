@@ -423,11 +423,18 @@ chosen {
 
 /* AUDIO GPIO standardization */
 &audgpio {
-	pinctrl-names = "default", "audpmicclk-mode0", "audpmicclk-mode1";
+
+	pinctrl-names = "default", "audpmicclk-mode0", "audpmicclk-mode1",
+			"extamp-pullhigh", "extamp-pulllow",
+			"extamp2-pullhigh", "extamp2-pulllow";
 	pinctrl-0 = <&AUD_pins_default>;
-	pinctrl-1 = <&AUD_pins_pmicclk_mode0>;
-	pinctrl-2 = <&AUD_pins_pmicclk_mode1>;
-	status = "okay";
+ 	pinctrl-1 = <&AUD_pins_pmicclk_mode0>;
+ 	pinctrl-2 = <&AUD_pins_pmicclk_mode1>;
+	pinctrl-3 = <&AUD_pins_extamp_high>;
+	pinctrl-4 = <&AUD_pins_extamp_low>;
+	pinctrl-5 = <&AUD_pins_extamp2_high>;
+	pinctrl-6 = <&AUD_pins_extamp2_low>;
+ 	status = "okay";
 };
 &pio {
 	AUD_pins_default: audiodefault {
@@ -453,6 +460,30 @@ chosen {
 		pins_cmd2_dat {
 			pins = <PINMUX_GPIO27__FUNC_AUD_DAT_MOSI>;
 		};
+	};
+
+	AUD_pins_extamp_high:extampouthigh {
+
+		pins_cmd_dat {
+			pins = <PINMUX_GPIO12__FUNC_GPIO12>;
+			slew-rate = <1>;
+			output-high;
+		};
+	};
+
+	AUD_pins_extamp_low:extampoutlow {
+
+		pins_cmd_dat {
+			pins = <PINMUX_GPIO12__FUNC_GPIO12>;
+			slew-rate = <1>;
+			output-low;
+		};
+	};
+
+	AUD_pins_extamp2_high:extamp2outhigh {
+	};
+
+	AUD_pins_extamp2_low:extamp2outlow {
 	};
 };
 /* AUDIO end */
