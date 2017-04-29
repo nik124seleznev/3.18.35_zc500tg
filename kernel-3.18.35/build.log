@@ -1,9 +1,11 @@
 make[1]: вход в каталог «/home/nik-kst/Android/3.18.35/kernel-3.18.35/out»
-  CHK     include/config/kernel.release
-  CHK     include/generated/uapi/linux/version.h
   GEN     ./Makefile
-  CHK     include/generated/utsrelease.h
+scripts/kconfig/conf --silentoldconfig Kconfig
+  CHK     include/config/kernel.release
+  GEN     ./Makefile
+  CHK     include/generated/uapi/linux/version.h
   Using .. as source for kernel
+  CHK     include/generated/utsrelease.h
 make[2]: «include/generated/mach-types.h» не требует обновления.
   CALL    ../scripts/checksyscalls.sh
   CHK     include/generated/compile.h
@@ -12,16 +14,22 @@ make[2]: «include/generated/mach-types.h» не требует обновлен
   LD      arch/arm/crypto/aes-arm-bs.o
   LD      arch/arm/crypto/built-in.o
 rm arch/arm/crypto/aesbs-core.S
+  CC      drivers/misc/mediatek/accelerometer/KXTJ2_1009-new/kxtj2_1009.o
+  LD      drivers/misc/mediatek/accelerometer/mc3410-new/built-in.o
+  LD      drivers/misc/mediatek/accelerometer/KXTJ2_1009-new/built-in.o
+  LD      drivers/misc/mediatek/accelerometer/built-in.o
 cameraisp drv by platform 
-  DTC     arch/arm/boot/dts/vz6580_we_i_n.dtb
 *MTK_GPU_VERSION 1 = mali
 *MTK_PLATFORM: mt6580
 $CONFIG_MTK_GPU_COMMON_DVFS_SUPPORT is []
 *MTK_PLATFORM: mt6580
+*MTK_GPU_VERSION 2 = utgard
 -= project path  ../drivers/misc/mediatek/imgsensor/src/mt6580/camera_project/vz6580_we_i_n/ =-
 imgsensor drv by platform gc0310_yuv imx179_mipi_raw ov5670_mipi_raw
 imgsensor drv by project 
-*MTK_GPU_VERSION 2 = utgard
+  LD      drivers/misc/mediatek/built-in.o
+  LD      drivers/misc/built-in.o
+  LD      drivers/built-in.o
   LINK    vmlinux
   LD      vmlinux.o
   MODPOST vmlinux.o
