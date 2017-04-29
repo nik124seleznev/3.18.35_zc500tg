@@ -14,16 +14,15 @@ make[2]: «include/generated/mach-types.h» не требует обновлен
   LD      arch/arm/crypto/aes-arm-bs.o
   LD      arch/arm/crypto/built-in.o
 rm arch/arm/crypto/aesbs-core.S
-  CC      drivers/misc/mediatek/accelerometer/KXTJ2_1009-new/kxtj2_1009.o
-  LD      drivers/misc/mediatek/accelerometer/mc3410-new/built-in.o
-  LD      drivers/misc/mediatek/accelerometer/KXTJ2_1009-new/built-in.o
-  LD      drivers/misc/mediatek/accelerometer/built-in.o
+  CC      drivers/misc/mediatek/alsps/stk3x1x/stk3x1x.o
 cameraisp drv by platform 
 *MTK_GPU_VERSION 1 = mali
 *MTK_PLATFORM: mt6580
 $CONFIG_MTK_GPU_COMMON_DVFS_SUPPORT is []
 *MTK_PLATFORM: mt6580
 *MTK_GPU_VERSION 2 = utgard
+  LD      drivers/misc/mediatek/alsps/stk3x1x/built-in.o
+  LD      drivers/misc/mediatek/alsps/built-in.o
 -= project path  ../drivers/misc/mediatek/imgsensor/src/mt6580/camera_project/vz6580_we_i_n/ =-
 imgsensor drv by platform gc0310_yuv imx179_mipi_raw ov5670_mipi_raw
 imgsensor drv by project 
