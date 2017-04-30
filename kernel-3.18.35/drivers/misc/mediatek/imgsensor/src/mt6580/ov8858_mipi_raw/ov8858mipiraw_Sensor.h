@@ -2,21 +2,21 @@
  *
  * Filename:
  * ---------
- *	 OV2680mipi_Sensor.h
+ *	 OV8858mipi_Sensor.h
  *
  * Project:
  * --------
  *	 ALPS
- *
+ *	PengtaoFan
  * Description:
  * ------------
  *	 CMOS sensor header file
  *
  ****************************************************************************/
-#ifndef _OV2680MIPI_SENSOR_H
-#define _OV2680MIPI_SENSOR_H
+#ifndef _OV8858MIPI_SENSOR_H
+#define _OV8858MIPI_SENSOR_H
 
-
+//表示sensor的几种工作模式状态：init preview capture video hvideo svideo
 typedef enum{
 	IMGSENSOR_MODE_INIT,
 	IMGSENSOR_MODE_PREVIEW,
@@ -26,6 +26,7 @@ typedef enum{
 	IMGSENSOR_MODE_SLIM_VIDEO,
 } IMGSENSOR_MODE;
 
+//表示几种（不同工作模式状态下）的sensor参数信息
 typedef struct imgsensor_mode_struct {
 	kal_uint32 pclk;				//record different mode's pclk
 	kal_uint32 linelength;			//record different mode's linelength
@@ -45,6 +46,7 @@ typedef struct imgsensor_mode_struct {
 	
 } imgsensor_mode_struct;
 
+//表示（当前状态工作模式）下的sensor参数信息
 /* SENSOR PRIVATE STRUCT FOR VARIABLES*/
 typedef struct imgsensor_struct {
 	kal_uint8 mirror;				//mirrorflip information
@@ -72,9 +74,10 @@ typedef struct imgsensor_struct {
 	kal_uint8 i2c_write_id;			//record current sensor's i2c write id
 } imgsensor_struct;
 
+//sensor基本信息，datasheet上的信息
 /* SENSOR PRIVATE STRUCT FOR CONSTANT*/
 typedef struct imgsensor_info_struct { 
-    kal_uint32 sensor_id;            //record sensor id defined in Kd_imgsensor.h
+	kal_uint16 sensor_id;			//record sensor id defined in Kd_imgsensor.h
 	kal_uint32 checksum_value;		//checksum value for Camera Auto Test
 	imgsensor_mode_struct pre;		//preview scenario relative information
 	imgsensor_mode_struct cap;		//capture scenario relative information
