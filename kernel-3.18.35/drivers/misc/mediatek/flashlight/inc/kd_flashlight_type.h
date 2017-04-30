@@ -90,9 +90,4 @@ typedef enum {
 	KAL_TRUE = 1,
 } kal_bool;
 
-/* temp define for 3643 dual functions */
-int flashEnable_lm3643_2(void);
-int flashDisable_lm3643_2(void);
-int setDuty_lm3643_2(int duty);
-
 #endif				/* _KD_FLASHLIGHT_TYPE_H */

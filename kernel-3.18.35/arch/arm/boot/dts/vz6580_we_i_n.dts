@@ -16,6 +16,10 @@
 		ranges = <0 0 0 0xffffffff>;
 	};
 
+	flashlight:flashlight {
+		compatible = "mediatek,mt6580-flashlight";
+	};
+
 	led@0 {
 		compatible = "mediatek,red";
 		led_mode = <0>;
@@ -649,6 +653,77 @@ chosen {
 	status = "okay";
 };
 /* CAMERA GPIO end */
+
+/* FLASHLIGHT GPIO standardization */
+&pio {
+        flashlight_pins_default: default {
+        };
+
+        flashlight_pins_hwen_high: hwen_high {
+            pins_cmd_dat {
+                        pins = <PINMUX_GPIO10__FUNC_GPIO10>;
+                        slew-rate = <1>;
+                        output-high;
+                };
+        };
+
+        flashlight_pins_hwen_low: hwen_low {
+            pins_cmd_dat {
+                        pins = <PINMUX_GPIO10__FUNC_GPIO10>;
+                        slew-rate = <1>;
+                        output-low;
+                };
+        };
+
+	flashlight_pins_torch_high: torch_high {
+
+	    pins_cmd_dat {
+                        pins = <PINMUX_GPIO10__FUNC_GPIO10>;
+			slew-rate = <1>;
+			output-high;
+		};
+	};
+
+	flashlight_pins_torch_low: torch_low {
+
+	    pins_cmd_dat {
+                        pins = <PINMUX_GPIO10__FUNC_GPIO10>;
+			slew-rate = <1>;
+			output-low;
+		};
+	};
+	flashlight_pins_flash_high: flash_high {
+
+	    pins_cmd_dat {
+			pins = <PINMUX_GPIO19__FUNC_GPIO19>;
+			slew-rate = <1>;
+			output-high;
+		};
+	};
+
+	flashlight_pins_flash_low: flash_low {
+
+	    pins_cmd_dat {
+			pins = <PINMUX_GPIO19__FUNC_GPIO19>;
+			slew-rate = <1>;
+			output-low;
+		};
+	};
+
+};
+&flashlight {
+	pinctrl-names = "default", "hwen_high", "hwen_low", "torch_high", "torch_low", "flash_high", "flash_low";
+        pinctrl-0 = <&flashlight_pins_default>;
+        pinctrl-1 = <&flashlight_pins_hwen_high>;
+        pinctrl-2 = <&flashlight_pins_hwen_low>;
+	pinctrl-3 = <&flashlight_pins_torch_high>;
+	pinctrl-4 = <&flashlight_pins_torch_low>;
+	pinctrl-5 = <&flashlight_pins_flash_high>;
+	pinctrl-6 = <&flashlight_pins_flash_low>;
+        status = "okay";
+
+};
+/* FLASHLIGHT GPIO end */
 
 /* CONSYS GPIO standardization */
 &pio {
