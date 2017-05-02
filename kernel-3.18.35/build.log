@@ -1,10 +1,8 @@
 make[1]: вход в каталог «/home/nik-kst/Android/3.18.35/kernel-3.18.35/out»
-  GEN     ./Makefile
-scripts/kconfig/conf --silentoldconfig Kconfig
   CHK     include/config/kernel.release
+  Using .. as source for kernel
   GEN     ./Makefile
   CHK     include/generated/uapi/linux/version.h
-  Using .. as source for kernel
   CHK     include/generated/utsrelease.h
 make[2]: «include/generated/mach-types.h» не требует обновления.
   CALL    ../scripts/checksyscalls.sh
@@ -14,7 +12,6 @@ make[2]: «include/generated/mach-types.h» не требует обновлен
   LD      arch/arm/crypto/aes-arm-bs.o
   LD      arch/arm/crypto/built-in.o
 rm arch/arm/crypto/aesbs-core.S
-  DTC     arch/arm/boot/dts/vz6580_we_i_n.dtb
 cameraisp drv by platform 
 *MTK_GPU_VERSION 1 = mali
 *MTK_PLATFORM: mt6580
@@ -37,6 +34,7 @@ imgsensor drv by project
   LD      vmlinux
   SORTEX  vmlinux
   SYSMAP  System.map
+  DTC     arch/arm/boot/dts/vz6580_we_i_n.dtb
   OBJCOPY arch/arm/boot/Image
   Kernel: arch/arm/boot/Image is ready
   GZIP    arch/arm/boot/compressed/piggy.gzip
