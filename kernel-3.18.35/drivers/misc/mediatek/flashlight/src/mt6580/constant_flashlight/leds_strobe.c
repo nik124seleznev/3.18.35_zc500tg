@@ -59,7 +59,7 @@
 #define TAG_NAME "[leds_strobe.c]"
 #define PK_DBG_FUNC(fmt, arg...)    pr_debug(TAG_NAME "%s: " fmt, __func__ , ##arg)
 
-/*#define DEBUG_LEDS_STROBE*/
+#define DEBUG_LEDS_STROBE
 #ifdef DEBUG_LEDS_STROBE
 	#define PK_DBG PK_DBG_FUNC
 #else
@@ -73,42 +73,48 @@
 static DEFINE_SPINLOCK(g_strobeSMPLock);	/* cotta-- SMP proection */
 
 
-static u32 strobe_Res;
-static u32 strobe_Timeus;
-static BOOL g_strobe_On;
+static u32 strobe_Res = 0;
+static u32 strobe_Timeus = 0;
+static BOOL g_strobe_On = 0;
 
-static int g_timeOutTimeMs;
+static int g_timeOutTimeMs=0;
+static BOOL g_is_torch_mode = 0;
 
 static DEFINE_MUTEX(g_strobeSem);
 
 static struct work_struct workTimeOut;
 
-/* #define FLASH_GPIO_ENF GPIO12 */
-/* #define FLASH_GPIO_ENT GPIO13 */
-#define FLASH_GPIO_EN GPIO_CAMERA_FLASH_EN_PIN
-
 /*****************************************************************************
 Functions
 *****************************************************************************/
+extern int iWriteRegI2C(u8 *a_pSendData , u16 a_sizeSendData, u16 i2cId);
+extern int iReadRegI2C(u8 *a_pSendData , u16 a_sizeSendData, u8 * a_pRecvData, u16 a_sizeRecvData, u16 i2cId);
 static void work_timeOutFunc(struct work_struct *data);
-static int g_duty = 0;
-#define LEDS_CUSTOM_MODE_THRES 	1
+
+#define LEDS_CUSTOM_MODE_THRES 	20
+
+#define FLASH_ON_PULSE 15
+
 int FL_Enable(void)
 {
-	if(g_duty < LEDS_CUSTOM_MODE_THRES)
+	int i =0;
+	PK_DBG("FL_Enable.g_is_torch_mode = %d\n",g_is_torch_mode);	
+	if(g_is_torch_mode)
 	{
-			PK_DBG(" FL_Enable line torch mode =%d\n", __LINE__);
-			flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_LOW);
-			flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_LOW);
-			flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_HIGH);
+		flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_LOW);
+		flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_HIGH);
 	}
 	else
 	{
-			PK_DBG(" FL_Enable line flash mode =%d\n", __LINE__);
+		flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_LOW);
+		flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_HIGH);
+		for(i =0 ; i< FLASH_ON_PULSE;i++)
+		{
+			udelay(100);
 			flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_LOW);
-			flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_LOW);
-			flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_HIGH);	
-			flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_HIGH);	
+			udelay(100);
+			flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_HIGH);
+		}
 	}
 	return 0;
 }
@@ -117,7 +123,7 @@ int FL_Enable(void)
 
 int FL_Disable(void)
 {
-		PK_DBG(" FL_Disable line=%d\n", __LINE__);
+		PK_DBG("FL_Disable");
 		flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_LOW);
 		flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_LOW);
 
@@ -126,32 +132,36 @@ int FL_Disable(void)
 
 int FL_dim_duty(kal_uint32 duty)
 {
-	PK_DBG("FL_dim_duty line=%d duty=%d\n", __LINE__,duty);
-	g_duty=duty;
-	if(duty < LEDS_CUSTOM_MODE_THRES)	
-	{
-		//flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_HIGH);	
-		PK_DBG(" FL_dim_duty line torch mode =%d\n", __LINE__);
+	PK_DBG("FL_dim_duty %d, g_is_torch_mode %d", duty, g_is_torch_mode);
+	if(duty == 0)	{
+		g_is_torch_mode = 1;		
 	}
-	else
-	{
-		//flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_HIGH);
-		PK_DBG(" FL_dim_duty line flash mode =%d\n", __LINE__);
+	else{
+		g_is_torch_mode = 0;		
 	}
+	if(g_timeOutTimeMs < 1001)
+	{
+		PK_DBG("FL_dim_duty %d > thres %d, timeout %d", duty, g_timeOutTimeMs);	
+		g_is_torch_mode = 1;
+	}
+	PK_DBG("FL_dim_duty %d, g_is_torch_mode %d, timeout %d\n", duty, g_is_torch_mode, g_timeOutTimeMs);
 	return 0;
 }
 
 int FL_Init(void)
 {
-	PK_DBG(" FL_Init line=%d\n", __LINE__);
-	flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_LOW);
-	flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_LOW);
+	PK_DBG("FL_Init");
+	FL_Disable();
+	INIT_WORK(&workTimeOut, work_timeOutFunc);
+	g_is_torch_mode = 1;
 	return 0;
 }
 
 int FL_Uninit(void)
 {
+	PK_DBG("FL_Uninit");
 	FL_Disable();
+	g_is_torch_mode = 0;
 	return 0;
 }
 
@@ -175,16 +185,12 @@ enum hrtimer_restart ledTimeOutCallback(struct hrtimer *timer)
 static struct hrtimer g_timeOutTimer;
 void timerInit(void)
 {
-	static int init_flag;
-
-	if (init_flag == 0) {
-		init_flag = 1;
 		INIT_WORK(&workTimeOut, work_timeOutFunc);
 		g_timeOutTimeMs = 1000;
 		hrtimer_init(&g_timeOutTimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
 		g_timeOutTimer.function = ledTimeOutCallback;
-	}
 }
+
 
 
 static int constant_flashlight_ioctl(unsigned int cmd, unsigned long arg)
@@ -197,7 +203,7 @@ static int constant_flashlight_ioctl(unsigned int cmd, unsigned long arg)
 	ior_shift = cmd - (_IOR(FLASHLIGHT_MAGIC, 0, int));
 	iow_shift = cmd - (_IOW(FLASHLIGHT_MAGIC, 0, int));
 	iowr_shift = cmd - (_IOWR(FLASHLIGHT_MAGIC, 0, int));
-
+	PK_DBG("constant_flashlight_ioctl() line=%d ior_shift=%d, iow_shift=%d iowr_shift=%d arg=%d\n",__LINE__, ior_shift, iow_shift, iowr_shift,(int)arg);
     switch(cmd)
     {
 	case FLASH_IOC_SET_TIME_OUT_TIME_MS:
@@ -219,23 +225,12 @@ static int constant_flashlight_ioctl(unsigned int cmd, unsigned long arg)
 
 	case FLASH_IOC_SET_ONOFF:
 		PK_DBG("FLASHLIGHT_ONOFF: %d\n", (int)arg);
-		if (arg == 1) {
-
-			int s;
-			int ms;
-
-			if (g_timeOutTimeMs > 1000) {
-				s = g_timeOutTimeMs / 1000;
-				ms = g_timeOutTimeMs - s * 1000;
-			} else {
-				s = 0;
-				ms = g_timeOutTimeMs;
-			}
-
-			if (g_timeOutTimeMs != 0) {
-				ktime_t ktime;
-
-				ktime = ktime_set(s, ms * 1000000);
+		if (arg == 1)
+    		{
+				if(g_timeOutTimeMs!=0)
+	            {
+	            	ktime_t ktime;
+					ktime = ktime_set( 0, g_timeOutTimeMs*1000000 );
 				hrtimer_start(&g_timeOutTimer, ktime, HRTIMER_MODE_REL);
 			}
 			FL_Enable();
