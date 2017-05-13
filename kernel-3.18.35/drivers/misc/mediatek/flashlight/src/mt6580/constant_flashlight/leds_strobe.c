@@ -91,13 +91,25 @@ static struct work_struct workTimeOut;
 Functions
 *****************************************************************************/
 static void work_timeOutFunc(struct work_struct *data);
-
+static int g_duty = 0;
+#define LEDS_CUSTOM_MODE_THRES 	1
 int FL_Enable(void)
 {
-	PK_DBG(" FL_Enable line=%d\n", __LINE__);
-
-	flashlight_gpio_set(FLASHLIGHT_PIN_HWEN, STATE_HIGH);
-
+	if(g_duty < LEDS_CUSTOM_MODE_THRES)
+	{
+			PK_DBG(" FL_Enable line torch mode =%d\n", __LINE__);
+			flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_LOW);
+			flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_LOW);
+			flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_HIGH);
+	}
+	else
+	{
+			PK_DBG(" FL_Enable line flash mode =%d\n", __LINE__);
+			flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_LOW);
+			flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_LOW);
+			flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_HIGH);	
+			flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_HIGH);	
+	}
 	return 0;
 }
 
@@ -105,22 +117,35 @@ int FL_Enable(void)
 
 int FL_Disable(void)
 {
-	PK_DBG(" FL_Disable line=%d\n", __LINE__);
-
-	flashlight_gpio_set(FLASHLIGHT_PIN_HWEN, STATE_LOW);
+		PK_DBG(" FL_Disable line=%d\n", __LINE__);
+		flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_LOW);
+		flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_LOW);
 
 	return 0;
 }
 
 int FL_dim_duty(kal_uint32 duty)
 {
-	PK_DBG(" FL_dim_duty line=%d\n", __LINE__);
+	PK_DBG("FL_dim_duty line=%d duty=%d\n", __LINE__,duty);
+	g_duty=duty;
+	if(duty < LEDS_CUSTOM_MODE_THRES)	
+	{
+		//flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_HIGH);	
+		PK_DBG(" FL_dim_duty line torch mode =%d\n", __LINE__);
+	}
+	else
+	{
+		//flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_HIGH);
+		PK_DBG(" FL_dim_duty line flash mode =%d\n", __LINE__);
+	}
 	return 0;
 }
 
 int FL_Init(void)
 {
 	PK_DBG(" FL_Init line=%d\n", __LINE__);
+	flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_LOW);
+	flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_LOW);
 	return 0;
 }
 
@@ -162,7 +187,6 @@ void timerInit(void)
 }
 
 
-
 static int constant_flashlight_ioctl(unsigned int cmd, unsigned long arg)
 {
 	int i4RetValue = 0;
@@ -173,12 +197,9 @@ static int constant_flashlight_ioctl(unsigned int cmd, unsigned long arg)
 	ior_shift = cmd - (_IOR(FLASHLIGHT_MAGIC, 0, int));
 	iow_shift = cmd - (_IOW(FLASHLIGHT_MAGIC, 0, int));
 	iowr_shift = cmd - (_IOWR(FLASHLIGHT_MAGIC, 0, int));
-/*	PK_DBG
-	    ("LM3643 constant_flashlight_ioctl() line=%d ior_shift=%d, iow_shift=%d iowr_shift=%d arg=%d\n",
-	     __LINE__, ior_shift, iow_shift, iowr_shift, (int)arg);
-*/
-	switch (cmd) {
 
+    switch(cmd)
+    {
 	case FLASH_IOC_SET_TIME_OUT_TIME_MS:
 		PK_DBG("FLASH_IOC_SET_TIME_OUT_TIME_MS: %d\n", (int)arg);
 		g_timeOutTimeMs = arg;
