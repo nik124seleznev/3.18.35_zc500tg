@@ -111,13 +111,13 @@ int FL_Enable(void)
 	}
 	else
 	{
-		flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_LOW);
+		flashlight_gpio_set(FLASHLIGHT_PIN_TORCH, STATE_HIGH);
 		flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_HIGH);
 		for(i =0 ; i< FLASH_ON_PULSE;i++)
 		{
-			udelay(100);
+			udelay(50);
 			flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_LOW);
-			udelay(100);
+			udelay(50);
 			flashlight_gpio_set(FLASHLIGHT_PIN_FLASH, STATE_HIGH);
 		}
 		PK_DBG(" FL_Enable line=%d\n",__LINE__);
