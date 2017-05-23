@@ -51,6 +51,20 @@
 #define GPIO_CAMERA_FLASH_EN_PIN_M_GPIO		GPIO_MODE_00
 #define GPIO_CAMERA_FLASH_EN_PIN_CLK		CLK_OUT1
 #define GPIO_CAMERA_FLASH_EN_PIN_FREQ		GPIO_CLKSRC_NONE
+/******************************************************************************
+ * new nik-kst
+******************************************************************************/
+#define GPIO_TORCH_EN         (GPIO10 | 0x80000000)
+#define GPIO_TORCH_EN_M_GPIO   GPIO_MODE_00
+#define GPIO_TORCH_EN_M_EINT   GPIO_MODE_06
+#define GPIO_TORCH_EN_M_PWM   GPIO_MODE_05
+
+#define GPIO_FLASH_LED_EN         (GPIO19 | 0x80000000)
+#define GPIO_FLASH_LED_EN_M_GPIO   GPIO_MODE_00
+#define GPIO_FLASH_LED_EN_M_EINT   GPIO_MODE_06
+/******************************************************************************
+ * end new nik-kst
+******************************************************************************/
 
 /******************************************************************************
  * Debug configuration
