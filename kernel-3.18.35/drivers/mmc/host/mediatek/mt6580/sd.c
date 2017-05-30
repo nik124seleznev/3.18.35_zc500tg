@@ -8082,10 +8082,9 @@ static irqreturn_t msdc_irq(int irq, void *dev_id)
 		goto done;
 	else
 #endif
-{
 		if (inten & MSDC_INT_XFER_COMPL)
 			goto done;
-}
+
 		if (intsts & datsts) {
 			/* do basic reset, or stop command will sdc_busy */
 			if (intsts & MSDC_INT_DATTMO)

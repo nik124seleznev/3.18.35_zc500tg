@@ -2076,11 +2076,10 @@ static INT32 stp_parser_data_in_full_mode(UINT32 length, UINT8 *p_data)
 
 		case MTKSTP_NAK:
 			/* (*sys_dbg_print)("MTKSTP_NAK : mtk_wcn_stp_parser_data, buff = %x", *p_data); */
-			if (fgEnableNak == 0){
+			if (fgEnableNak == 0)
 				stp_core_ctx.parser.nak = 0;	/* disable NAK */
-			}else{
+			else
 				stp_core_ctx.parser.nak = (*p_data & 0x80) >> 7;
-			}
 				stp_core_ctx.parser.type = (*p_data & 0x70) >> 4;
 				stp_core_ctx.parser.length = (*p_data & 0x0f) << 8;
 				stp_core_ctx.rx_buf[1] = *p_data;

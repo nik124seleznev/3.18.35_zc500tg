@@ -372,9 +372,8 @@ seq_print_userip_objs(const struct userstack_entry *entry, struct trace_seq *s,
 		ret = trace_seq_putc(s, '\n');
 	}
 
-	if (mm){
+	if (mm)
 		mmput(mm);
-	}
 	return ret;
 }
 
@@ -979,10 +978,8 @@ static enum print_line_t trace_graph_ret_raw(struct trace_iterator *iter, int fl
 			      field->ret.calltime,
 			      field->ret.rettime,
 			      field->ret.overrun,
-			      field->ret.depth))
-		{
-			return TRACE_TYPE_PARTIAL_LINE;
-		}
+			      field->ret.depth));
+		return TRACE_TYPE_PARTIAL_LINE;
 
 	return TRACE_TYPE_HANDLED;
 }
