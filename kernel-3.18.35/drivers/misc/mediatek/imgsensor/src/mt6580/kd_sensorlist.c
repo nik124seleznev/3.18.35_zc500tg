@@ -105,6 +105,7 @@ struct regulator *regVCAMD = NULL;
 struct regulator *regVCAMIO = NULL;
 struct regulator *regVCAMAF = NULL;
 struct regulator *regSubVCAMD = NULL;
+struct regulator *regVGP3 = NULL;
 #endif
 #define SENSOR_WR32(addr, data)    mt65xx_reg_sync_writel(data, addr)	/* For 89 Only.   // NEED_TUNING_BY_PROJECT */
 /* #define SENSOR_WR32(addr, data)    iowrite32(data, addr)    // For 89 Only.   // NEED_TUNING_BY_PROJECT */
@@ -1323,11 +1324,12 @@ kdModulePowerOn(CAMERA_DUAL_CAMERA_SENSOR_ENUM socketIdx[KDIMGSENSOR_MAX_INVOKE_
 
 	for (i = KDIMGSENSOR_INVOKE_DRIVER_0; i < KDIMGSENSOR_MAX_INVOKE_DRIVERS; i++) {
 		if (g_bEnableDriver[i]) {
-			/* PK_XLOG_INFO("[%s][%d][%d][%s][%s]\r\n",__FUNCTION__,g_bEnableDriver[i],socketIdx[i],sensorNameStr[i],mode_name); */
+			 PK_ERR("[%s][%d][%d][%s][%s]\r\n",__FUNCTION__,g_bEnableDriver[i],socketIdx[i],sensorNameStr[i],mode_name); 
 #ifndef CONFIG_FPGA_EARLY_PORTING
 			ret = _kdCISModulePowerOn(socketIdx[i], sensorNameStr[i], On, mode_name);
 #endif
 			if (ERROR_NONE != ret) {
+PK_ERR("ERROR moduleon[%s][%d][%d][%s][%s]\r\n",__FUNCTION__,g_bEnableDriver[i],socketIdx[i],sensorNameStr[i],mode_name); 
 				PK_ERR("[%s]", __func__);
 				return ret;
 			}
@@ -1417,7 +1419,7 @@ int kdSetDriver(unsigned int *pDrvIndex)
 			       sizeof(pSensorList[drvIdx[i]].drvname));
 			/* return sensor ID */
 			/* pDrvIndex[0] = (unsigned int)pSensorList[drvIdx].SensorId; */
-			PK_INF("[%d][%d][%d][%s][%d]\n", i, g_bEnableDriver[i],
+			PK_ERR("[%d][%d][%d][%s][%d]\n", i, g_bEnableDriver[i],
 			       g_invokeSocketIdx[i], g_invokeSensorNameStr[i],
 			       sizeof(pSensorList[drvIdx[i]].drvname));
 		}
@@ -3047,6 +3049,9 @@ bool Get_Cam_Regulator(void)
 				if (regVCAMAF == NULL) {
 					regVCAMAF = regulator_get(sensor_device, "vcamaf");
 				}
+                                if (regVGP3 == NULL) {
+						regVGP3 = regulator_get(sensor_device, "vgp3");//stas
+				}
 			} else {
 				/* backup original dev.of_node */
 				kd_node = sensor_device->of_node;
@@ -3054,11 +3059,6 @@ bool Get_Cam_Regulator(void)
 				sensor_device->of_node =
 				    of_find_compatible_node(NULL, NULL,
 							    "mediatek,camera_hw");
-				/* 若你需要sub也定義的話，需要自己加上
-				   if (regVCAMA == NULL) {
-				   regVCAMA_SUB = regulator_get(sensor_device, "SUB_CAMERA_POWER_A");
-				   }
-				 */
 				if (regVCAMA == NULL) {
 						regVCAMA = regulator_get(sensor_device, "vcama");
 				}
@@ -3067,6 +3067,9 @@ bool Get_Cam_Regulator(void)
 				}
 				if (regSubVCAMD == NULL) {
 						regSubVCAMD = regulator_get(sensor_device, "vcamd_sub");
+				}
+				if (regVGP3 == NULL) {
+						regVGP3 = regulator_get(sensor_device, "vgp3");//stas
 				}
 				if (regVCAMIO == NULL) {
 						regVCAMIO = regulator_get(sensor_device, "vcamio");
@@ -3102,7 +3105,9 @@ bool _hwPowerOn(KD_REGULATOR_TYPE_T type, int powerVolt)
 		reg = regVCAMIO;
 	} else if (type == VCAMAF) {
 		reg = regVCAMAF;
-	} else
+	} else if (type == VGP3) 
+        {reg = regVGP3;}//stas
+ 	 else
 		return ret;
 
 	if (!IS_ERR(reg)) {
@@ -3139,7 +3144,9 @@ bool _hwPowerDown(KD_REGULATOR_TYPE_T type)
 		reg = regVCAMIO;
 	} else if (type == VCAMAF) {
 		reg = regVCAMAF;
-	} else
+	} else if (type == VGP3) 
+        {reg = regVGP3;}//stas
+	else
 		return ret;
 
 	if (!IS_ERR(reg)) {
